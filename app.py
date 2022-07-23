@@ -104,24 +104,24 @@ def get_shortest_route(fileName,startNode,goalNode):
         
 
     # constructing answer in string format 
-    preNode=goalNode
+    curNode=goalNode
     path=''
     isGoalNode=True
     isStartNodeYet=False
     while True:
-        if preNode in visistedNodeDict:
+        if curNode in visistedNodeDict:
             if isGoalNode:
-                path=preNode
+                path=curNode
                 isGoalNode=False 
             else:
-                path=preNode+"->"+path
-            isStartNodeYet= True if preNode == startNode else False
-            preNode=visistedNodeDict[preNode]['preNode']
+                path=curNode+"->"+path
+            isStartNodeYet= True if curNode == startNode else False
+            curNode=visistedNodeDict[curNode]['preNode']
             
-            if preNode==None and isStartNodeYet :
+            if curNode==None and isStartNodeYet :
                 path='Path from '+startNode+' to '+goalNode+' is '+path+', and have cost '+str(visistedNodeDict[goalNode]['distance'])+'.'
                 break
-            if preNode==None and (not isStartNodeYet):
+            if curNode==None and (not isStartNodeYet):
                 path='Path from '+startNode+' to '+goalNode+' is not found'
                 break
 
