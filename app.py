@@ -54,7 +54,7 @@ def get_shortest_route(fileName,startNode,goalNode):
     for key in graphRep.keys():
         unvistedNodeDict[key]={'preNode':None,'distance':float('inf')}
 
-    # check fo invalid input node
+    # check for invalid input node
     if not startNode in graphRep:
         return "Undefine Start Node: "+startNode
     if not goalNode in graphRep:
@@ -102,29 +102,24 @@ def get_shortest_route(fileName,startNode,goalNode):
         curStartNode=nextStartNode
  
         
-
     # constructing answer in string format 
     curNode=goalNode
     path=''
-    isGoalNode=True
-    isStartNodeYet=False
     while True:
         if curNode in visistedNodeDict:
-            if isGoalNode:
+            if curNode==goalNode:
                 path=curNode
-                isGoalNode=False 
             else:
                 path=curNode+"->"+path
-            isStartNodeYet= True if curNode == startNode else False
-            curNode=visistedNodeDict[curNode]['preNode']
+            preNode=visistedNodeDict[curNode]['preNode']
             
-            if curNode==None and isStartNodeYet :
+            if preNode==None and curNode==startNode :
                 path='Path from '+startNode+' to '+goalNode+' is '+path+', and have cost '+str(visistedNodeDict[goalNode]['distance'])+'.'
                 break
-            if curNode==None and (not isStartNodeYet):
+            if preNode==None and curNode!=startNode:
                 path='Path from '+startNode+' to '+goalNode+' is not found'
                 break
-
+            curNode=preNode
     
     return path
 
