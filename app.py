@@ -14,8 +14,8 @@ def get_shortest_route(fileName,startNode,goalNode):
 
     # read file and construct graph
     # exp: {
-    #       'D': [{'A': {'distance': 3}}, {'G': {'distance': 6}}], 
-    #       'E': [{'A': {'distance': 4}}, {'F': {'distance': 6}}],
+    #       'D': {'A': {'distance': 3}, 'G': {'distance': 6}}, 
+    #       'E': {'A': {'distance': 4}, 'F': {'distance': 6}},
     #       ...
     #       }
     with open(fileName,'r') as f:
@@ -25,14 +25,14 @@ def get_shortest_route(fileName,startNode,goalNode):
             # create a list of neighbor nodes(contains node name and distance) of a given node
             if nodeRelationship[2]!='0':
                 if not nodeRelationship[0] in graphRep:
-                    graphRep[nodeRelationship[0]]=[]
+                    graphRep[nodeRelationship[0]]={}
                 if not nodeRelationship[1] in graphRep:
-                    graphRep[nodeRelationship[1]]=[]
-                graphRep[nodeRelationship[0]].append({nodeRelationship[1]:{'distance':int(nodeRelationship[2])}})
-                graphRep[nodeRelationship[1]].append({nodeRelationship[0]:{'distance':int(nodeRelationship[2])}})
+                    graphRep[nodeRelationship[1]]={}
+                graphRep[nodeRelationship[0]][nodeRelationship[1]]={'distance':int(nodeRelationship[2])}
+                graphRep[nodeRelationship[1]][nodeRelationship[0]]={'distance':int(nodeRelationship[2])}
             else:
                 if not nodeRelationship[0] in graphRep:
-                    graphRep[nodeRelationship[0]]=[]
+                    graphRep[nodeRelationship[0]]={}
 
 
     # To find shortest path
@@ -68,17 +68,17 @@ def get_shortest_route(fileName,startNode,goalNode):
 
     # start finding shortest path
     while len(unvistedNodeDict)>0:
-        for neighborNodes in graphRep[curStartNodeName]:
+        for neighborNodeKey in graphRep[curStartNodeName].keys():
 
             # calculate distance from the current start node to its neighbor node
             # ignore already visisted node, if shorter path is found then update this value to distance, and update new previous node
-            for neighbordNodeKey in neighborNodes.keys():
-                if neighbordNodeKey in visistedNodeDict:
-                    continue
-                tempDistance=curStartNode['distance']+neighborNodes[neighbordNodeKey]['distance']
-                if tempDistance < unvistedNodeDict[neighbordNodeKey]['distance'] :
-                    unvistedNodeDict[neighbordNodeKey]['distance']=tempDistance
-                    unvistedNodeDict[neighbordNodeKey]['preNode']=curStartNodeName
+            
+            if neighborNodeKey in visistedNodeDict:
+                continue
+            tempDistance=curStartNode['distance']+graphRep[curStartNodeName][neighborNodeKey]['distance']
+            if tempDistance < unvistedNodeDict[neighborNodeKey]['distance'] :
+                unvistedNodeDict[neighborNodeKey]['distance']=tempDistance
+                unvistedNodeDict[neighborNodeKey]['preNode']=curStartNodeName
 
 
         # move curStartNode from unvisited node dict to visisted node dict
