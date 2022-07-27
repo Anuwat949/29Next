@@ -27,6 +27,6 @@ shortest path between “Start Node” To “Goal Node”.
 
 To start the program : python main.py
 
-To start the unit test: python test_bi_direction_graph.py
+To start the unit test : python test_bi_direction_graph.py
 
 
